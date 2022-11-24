@@ -32,7 +32,6 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     @Transactional
-    @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     public Long getAmount(Integer id) {
 
         Account account = accountRepository.findById(id)
@@ -44,6 +43,7 @@ public class AccountServiceImpl implements AccountService{
     }
 
     /*
+        Пока пытаюсь разобраться с addAmount.
         Все потоки идут в создание, и создается ошибка, что запись уже существует
         Не понимаю как правильно настроить транзакции
      */
