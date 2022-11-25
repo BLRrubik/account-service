@@ -27,7 +27,6 @@ public class AccountController {
 
     @PostMapping("/amount")
     public void addAmount(@RequestBody AmountAddRequest request) {
-        // тут пробовал через jms реализовать, но это, как мне кажется, долго
         jmsTemplate.convertAndSend("addAmount", request);
 //        accountService.addAmount(request.getId(), request.getAmount());
     }

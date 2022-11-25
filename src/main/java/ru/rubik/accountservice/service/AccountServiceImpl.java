@@ -14,7 +14,6 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.rubik.accountservice.entity.Account;
 import ru.rubik.accountservice.repository.AccountRepository;
@@ -59,18 +58,19 @@ public class AccountServiceImpl implements AccountService{
     public Long getAmount(Integer id) {
 
         Account account = accountRepository.findById(id)
-                .orElseGet(() -> self.createAccount(id));
+                .orElseGet(() -> {
+                    Account acc = new Account();
+                    acc.setId(id);
+                    acc.setAmount(0L);
+
+                    return acc;
+                });
 
         logger.info("Get amount from account with id " + id + " and amount " + account.getAmount());
 
         return account.getAmount();
     }
 
-    /*
-        Пока пытаюсь разобраться с addAmount.
-        Все потоки идут в создание, и создается ошибка, что запись уже существует
-        Не понимаю как правильно настроить транзакции
-     */
     @Transactional
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     @Retryable( // (1)
@@ -99,7 +99,6 @@ public class AccountServiceImpl implements AccountService{
     @Override
     @Transactional
     public void addAmount(Integer id, Long value) {
-        // если не существует записи в бд, то запись создается через прокси
         Account account = accountRepository.findById(id)
                 .orElseGet(() -> self.createAccount(id));
 
