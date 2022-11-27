@@ -33,6 +33,5 @@ public class AccountController {
         statsService.increaseAddAmountRequestCount();
         statsService.markAddMountRequest();
         jmsTemplate.convertAndSend("addAmount", request);
-//        accountService.addAmount(request.getId(), request.getAmount());
     }
 }
