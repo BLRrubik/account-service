@@ -1,13 +1,16 @@
 package ru.rubik.accountservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.rubik.accountservice.dto.RequestCountDto;
+import ru.rubik.accountservice.dto.RequestPerMinuteDto;
 import ru.rubik.accountservice.service.StatsService;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/stats")
@@ -20,28 +23,52 @@ public class StatsController {
     }
 
     @GetMapping("/requests/addAmount")
-    public Long getAddRequestsCount() {
-        return statsService.getAddRequestsCount();
+    public ResponseEntity<RequestCountDto> getAddRequestsCount() {
+        return ResponseEntity.of(
+                Optional.of(
+                        new RequestCountDto(
+                                statsService.getAddRequestsCount()
+                        )
+                )
+        );
     }
 
     @GetMapping("/requests/getAmount")
-    public Long getGetRequestsCount() {
-        return statsService.getGetRequestsCount();
+    public ResponseEntity<RequestCountDto> getGetRequestsCount() {
+        return ResponseEntity.of(
+                Optional.of(
+                        new RequestCountDto(
+                                statsService.getGetRequestsCount()
+                        )
+                )
+        );
     }
 
     @GetMapping("/metrics/addAmount")
-    public Double getMetricsOfAddAmount() {
-        return statsService.getOneMinuteRateOfAddMountRequest();
+    public ResponseEntity<RequestPerMinuteDto> getMetricsOfAddAmount() {
+        return ResponseEntity.of(
+                Optional.of(
+                        new RequestPerMinuteDto(
+                                statsService.getOneMinuteRateOfAddMountRequest()
+                        )
+                )
+        );
     }
 
     @GetMapping("/metrics/getAmount")
-    public Double getMetricsOfGetAmount() {
-        return statsService.getOneMinuteRateOfAddMountRequest();
+    public ResponseEntity<RequestPerMinuteDto> getMetricsOfGetAmount() {
+        return ResponseEntity.of(
+                Optional.of(
+                        new RequestPerMinuteDto(
+                                statsService.getOneMinuteRateOfGetMountRequest()
+                        )
+                )
+        );
     }
 
     @PostMapping("/reset")
-    public HttpStatus resetStats() {
+    public ResponseEntity<?> resetStats() {
         statsService.resetStats();
-        return HttpStatus.ACCEPTED;
+        return ResponseEntity.ok("Stats success reset");
     }
 }
