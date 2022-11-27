@@ -51,4 +51,9 @@ public class StatsService {
     public Long getGetRequestsCount() {
         return getRequestsCount;
     }
+
+    public void resetStats() {
+        addRequestsCount = 0L;
+        getRequestsCount = 0L;
+    }
 }
