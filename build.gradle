@@ -28,6 +28,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation group: 'org.springframework.retry', name: 'spring-retry', version: '2.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-activemq'
+    // https://mvnrepository.com/artifact/io.dropwizard.metrics/metrics-core
+    implementation group: 'io.dropwizard.metrics', name: 'metrics-core', version: '4.2.13'
+
 
 
 }
